@@ -11,6 +11,10 @@ struct ContentView: View {
     @State private var rolldice = false
     @State private var rolledDice = 0
     @State private var rollingResults = [Int]()
+    @State private var diceSides = [4,6,8,10,12,20,100]
+    @State private var selectedDiceSide = 4
+    
+    @State private var triggerFeedback = false
     
     let savePath = URL.documentsDirectory.appending(path: "RolledDiceResults")
     
@@ -24,8 +28,35 @@ struct ContentView: View {
             Button(" Let's roll", systemImage: "dice.fill") {
                 startRolling()
                 rolldice = true
+                triggerFeedback.toggle()
             }
+            .sensoryFeedback(.warning, trigger: triggerFeedback)
             .font(.largeTitle)
+            .padding()
+            
+            
+            Section("Select The Dice Side") {
+                Picker("Dice Sides", selection: $selectedDiceSide) {
+                    ForEach(diceSides, id: \.self) {
+                        Text($0, format: .number)
+                    }
+                }
+                .onChange(of: selectedDiceSide) { oldValue, newValue in
+                    triggerFeedback.toggle()
+                }
+                .sensoryFeedback(.warning, trigger: triggerFeedback)
+                .pickerStyle(.segmented)
+            }
+
+            
+            Button("Delete Previous Rolling Results", systemImage: "xmark.bin.circle") {
+                clearDiceResults()
+                triggerFeedback.toggle()
+            }
+            .sensoryFeedback(.warning, trigger: triggerFeedback)
+            .foregroundStyle(.red)
+            .padding()
+            
             if rolldice {
                 Text("You rolled \(rolledDice)")
                     .foregroundStyle(.red)
@@ -41,7 +72,7 @@ struct ContentView: View {
     }
     
     func startRolling() {
-        rolledDice = Int.random(in: 1...6)
+        rolledDice = Int.random(in: 1...selectedDiceSide)
         rollingResults.append(rolledDice)
         saveData()
         
@@ -66,6 +97,10 @@ struct ContentView: View {
             print("Unable to load data: \(error.localizedDescription)")
             rollingResults = []
         }
+    }
+    func clearDiceResults() {
+        rollingResults.removeAll()
+        saveData()
     }
 }
 
