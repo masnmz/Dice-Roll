@@ -8,8 +8,21 @@
 import SwiftUI
 
 struct PreviousRollView: View {
+    var previousRolls = [Int]()
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            List {
+                ForEach(previousRolls.indices, id: \.self) { index in
+                    Text("\(index + 1). Previously rolled: \(previousRolls[index])")
+                }
+            }
+            .listStyle(PlainListStyle())
+            .scrollContentBackground(.hidden)
+        }
+        .ignoresSafeArea()
+        .navigationTitle("Previous Rolls")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

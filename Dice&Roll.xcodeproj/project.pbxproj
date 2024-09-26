@@ -11,6 +11,7 @@
 		D5797B7C2CA3096500AE0B31 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5797B7B2CA3096500AE0B31 /* ContentView.swift */; };
 		D5797B7E2CA3096800AE0B31 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5797B7D2CA3096800AE0B31 /* Assets.xcassets */; };
 		D5797B812CA3096800AE0B31 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5797B802CA3096800AE0B31 /* Preview Assets.xcassets */; };
+		D5882B542CA589CC000CBE87 /* PreviousRollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5882B532CA589CC000CBE87 /* PreviousRollView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		D5797B7B2CA3096500AE0B31 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D5797B7D2CA3096800AE0B31 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D5797B802CA3096800AE0B31 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D5882B532CA589CC000CBE87 /* PreviousRollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousRollView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +55,7 @@
 			children = (
 				D5797B792CA3096500AE0B31 /* Dice_RollApp.swift */,
 				D5797B7B2CA3096500AE0B31 /* ContentView.swift */,
+				D5882B532CA589CC000CBE87 /* PreviousRollView.swift */,
 				D5797B7D2CA3096800AE0B31 /* Assets.xcassets */,
 				D5797B7F2CA3096800AE0B31 /* Preview Content */,
 			);
@@ -138,6 +141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5797B7C2CA3096500AE0B31 /* ContentView.swift in Sources */,
+				D5882B542CA589CC000CBE87 /* PreviousRollView.swift in Sources */,
 				D5797B7A2CA3096500AE0B31 /* Dice_RollApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

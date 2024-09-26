@@ -16,6 +16,7 @@ struct ContentView: View {
     @State private var triggerFeedback = false
     @State private var timerCounter = 0
     @State private var displayedRolledDiceForTimer = 1
+    @State private var animationAmount = 0.0
     
     @State private var timer = Timer.publish(every: 0.08, on: .main, in: .common).autoconnect()
     
@@ -25,71 +26,93 @@ struct ContentView: View {
         
     }
     var body: some View {
-        VStack(spacing: 10) {
-            
-            
-            Button(" Let's roll", systemImage: "dice.fill") {
-                timerCounter = 0
-                flickerResult()
-                startRolling()
-                rolldice = true
-                triggerFeedback.toggle()
-            }
-            .sensoryFeedback(.warning, trigger: triggerFeedback)
-            .font(.largeTitle)
-            .padding()
-            
-            
-            Section("Select The Dice Side") {
-                Picker("Dice Sides", selection: $selectedDiceSide) {
-                    ForEach(diceSides, id: \.self) {
-                        Text($0, format: .number)
-                    }
-                }
-                .onChange(of: selectedDiceSide) { oldValue, newValue in
+        NavigationView {
+            VStack(spacing: 10) {
+                
+                
+                Button(" Let's roll", systemImage: "dice.fill") {
+                    timerCounter = 0
+                    flickerResult()
+                    startRolling()
+                    rolldice = true
                     triggerFeedback.toggle()
                 }
+                .foregroundStyle(.blue)
                 .sensoryFeedback(.warning, trigger: triggerFeedback)
-                .pickerStyle(.segmented)
-            }
-            
-            
-            Button("Delete Previous Rolling Results", systemImage: "xmark.bin.circle") {
-                clearDiceResults()
-                triggerFeedback.toggle()
-            }
-            .sensoryFeedback(.warning, trigger: triggerFeedback)
-            .foregroundStyle(.red)
-            
-                List {
-                    if rolldice {
-                        if timerCounter < 30 {
-                            Text("Rolling... \(displayedRolledDiceForTimer)")
-                                
+                .font(.largeTitle)
+                .padding()
+                
+                
+                Section("Select The Dice Side") {
+                    Picker("Dice Sides", selection: $selectedDiceSide) {
+                        ForEach(diceSides, id: \.self) {
+                            Text($0, format: .number)
                         }
-                        else {
-                            Text("You rolled \(rolledDice)")
-                                .foregroundStyle(.red)
-                            ForEach(rollingResults.indices, id: \.self) { index in
-                                Text("Previously rolled \(index + 1): \(rollingResults[index])")
-                            }
+                    }
+                    .onChange(of: selectedDiceSide) { oldValue, newValue in
+                        triggerFeedback.toggle()
+                    }
+                    .sensoryFeedback(.warning, trigger: triggerFeedback)
+                    .pickerStyle(.segmented)
+                }
+                
+                if rolldice {
+                    if timerCounter < 30 {
+                        VStack(alignment: .center) {
+                            Image(systemName: "die.face.3.fill")
+                                .font(.system(size: 100))
+                                .rotation3DEffect(
+                                    .degrees(animationAmount),
+                                    axis: (x: 0.0, y: 0.0, z: 1.0)
+                                )
+                                .animation(.easeIn, value: animationAmount)
+                            
+                            Text("Rolling... \(displayedRolledDiceForTimer)")
+                                .padding(.vertical, 100)
                         }
                         
                     }
+                    else {
+                            Text("You rolled \(rolledDice)")
+                                .foregroundStyle(.green)
+                                .padding(.vertical, 100)
+                        
+                        
+                    }
                 }
-                .listStyle(PlainListStyle())
-                .listItemTint(.monochrome)
-                .scrollContentBackground(.hidden)
-            
-
-            
+                
+                NavigationLink(destination: PreviousRollView(previousRolls: rollingResults)) {
+                    HStack {
+                        Text("Show Previous Rolls")
+                            .foregroundStyle(.yellow)
+                        Image(systemName: "arrowshape.right.fill")
+                            .foregroundStyle(.yellow)
+                    }
+                    
+                }
+                
+                
+                
+                
+            }
+            .frame(maxWidth: .infinity)
+            .onAppear(perform: loadData)
+            .onReceive(timer) { _ in
+                flickerResult()
+                timerCounter += 1
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Delete Previous Rolls", systemImage: "bin.xmark.fill", role: .destructive) {
+                        clearDiceResults()
+                        triggerFeedback.toggle()
+                    }
+                }
+                
+            }
+            .tint(.red)
         }
-        .frame(maxWidth: .infinity)
-        .onAppear(perform: loadData)
-        .onReceive(timer) { _ in
-            flickerResult()
-            timerCounter += 1
-        }
+        
         
     }
     
@@ -125,6 +148,7 @@ struct ContentView: View {
     
     func flickerResult() {
         displayedRolledDiceForTimer = Int.random(in: 1...selectedDiceSide)
+        animationAmount += 180
     }
     
     func clearDiceResults() {
